@@ -4,6 +4,10 @@
 
 이 프로젝트는 Flutter 기반의 영화 정보 애플리케이션입니다. 클린 아키텍처 패턴을 적용하여 TMDB API에서 다양한 카테고리의 영화 정보를 가져와 사용자에게 제공합니다. Hero 위젯을 활용한 애니메이션 효과와 함께 사용자가 쉽게 영화 정보를 탐색할 수 있는 경험을 제공합니다.
 
+## 📱 시연 영상
+
+[![시연 영상 보기](https://img.youtube.com/vi/OKqoMnWGQ5o/hqdefault.jpg)](https://www.youtube.com/shorts/OKqoMnWGQ5o)
+
 ## 🎯 주요 기능
 
 - **영화 목록 표시**: 현재 상영중, 인기순, 평점 높은순, 개봉예정 영화를 각각 리스트로 표시합니다.
