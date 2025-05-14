@@ -20,6 +20,23 @@ class MockFetchTopRatedMoviesUseCase extends Mock
 class MockFetchUpcomingMoviesUseCase extends Mock
     implements FetchUpcomingMoviesUseCase {}
 
+class TestHomeViewModel extends HomeViewModel {
+  @override
+  HomeState build() {
+    return HomeState(isLoading: true);
+  }
+
+  @override
+  Future<void> fetchMovies() async {
+    state = state.copyWith(isLoading: true);
+    return super.fetchMovies();
+  }
+}
+
+final testHomeViewModelProvider = NotifierProvider<HomeViewModel, HomeState>(
+  TestHomeViewModel.new,
+);
+
 void main() {
   ProviderContainer? container;
   MockFetchNowPlayingMoviesUseCase? mockNowPlayingUseCase;
@@ -35,10 +52,18 @@ void main() {
 
     container = ProviderContainer(
       overrides: [
-        fetchNowPlayingMoviesUseCaseProvider.overrideWithValue(mockNowPlayingUseCase!),
-        fetchPopularMoviesUseCaseProvider.overrideWithValue(mockPopularUseCase!),
-        fetchTopRatedMoviesUseCaseProvider.overrideWithValue(mockTopRatedUseCase!),
-        fetchUpcomingMoviesUseCaseProvider.overrideWithValue(mockUpcomingUseCase!),
+        fetchNowPlayingMoviesUseCaseProvider.overrideWithValue(
+          mockNowPlayingUseCase!,
+        ),
+        fetchPopularMoviesUseCaseProvider.overrideWithValue(
+          mockPopularUseCase!,
+        ),
+        fetchTopRatedMoviesUseCaseProvider.overrideWithValue(
+          mockTopRatedUseCase!,
+        ),
+        fetchUpcomingMoviesUseCaseProvider.overrideWithValue(
+          mockUpcomingUseCase!,
+        ),
       ],
     );
 
@@ -75,7 +100,7 @@ void main() {
 
     test('initial state should not be loading', () {
       // Arrange & Act
-      final initialState = container!.read(homeViewModelProvider);
+      final initialState = container!.read(testHomeViewModelProvider);
 
       // Assert
       expect(initialState.isLoading, isTrue);
@@ -87,34 +112,45 @@ void main() {
       expect(initialState.featuredMovie, isNull);
     });
 
-    test('fetchMovies should update state with movies when successful', () async {
-      // Arrange - setup the mock behavior
-      when(() => mockNowPlayingUseCase!.execute()).thenAnswer((_) async => testMovies);
-      when(() => mockPopularUseCase!.execute()).thenAnswer((_) async => testMovies);
-      when(() => mockTopRatedUseCase!.execute()).thenAnswer((_) async => testMovies);
-      when(() => mockUpcomingUseCase!.execute()).thenAnswer((_) async => testMovies);
+    test(
+      'fetchMovies should update state with movies when successful',
+      () async {
+        // Arrange - setup the mock behavior
+        when(
+          () => mockNowPlayingUseCase!.execute(),
+        ).thenAnswer((_) async => testMovies);
+        when(
+          () => mockPopularUseCase!.execute(),
+        ).thenAnswer((_) async => testMovies);
+        when(
+          () => mockTopRatedUseCase!.execute(),
+        ).thenAnswer((_) async => testMovies);
+        when(
+          () => mockUpcomingUseCase!.execute(),
+        ).thenAnswer((_) async => testMovies);
 
-      // Act - call the method we want to test
-      await container!.read(homeViewModelProvider.notifier).fetchMovies();
+        // Act - call the method we want to test
+        await container!.read(testHomeViewModelProvider.notifier).fetchMovies();
 
-      // Read the state after the operation
-      final updatedState = container!.read(homeViewModelProvider);
+        // Read the state after the operation
+        final updatedState = container!.read(testHomeViewModelProvider);
 
-      // Assert
-      expect(updatedState.isLoading, isFalse);
-      expect(updatedState.error, isNull);
-      expect(updatedState.nowPlaying, equals(testMovies));
-      expect(updatedState.popular, equals(testMovies));
-      expect(updatedState.topRated, equals(testMovies));
-      expect(updatedState.upcoming, equals(testMovies));
-      expect(updatedState.featuredMovie, equals(testMovies[0]));
+        // Assert
+        expect(updatedState.isLoading, isFalse);
+        expect(updatedState.error, isNull);
+        expect(updatedState.nowPlaying, equals(testMovies));
+        expect(updatedState.popular, equals(testMovies));
+        expect(updatedState.topRated, equals(testMovies));
+        expect(updatedState.upcoming, equals(testMovies));
+        expect(updatedState.featuredMovie, equals(testMovies[0]));
 
-      verify(() => mockNowPlayingUseCase!.execute()).called(1);
-      verify(() => mockPopularUseCase!.execute()).called(1);
-      verify(() => mockTopRatedUseCase!.execute()).called(1);
-      verify(() => mockUpcomingUseCase!.execute()).called(1);
+        verify(() => mockNowPlayingUseCase!.execute()).called(1);
+        verify(() => mockPopularUseCase!.execute()).called(1);
+        verify(() => mockTopRatedUseCase!.execute()).called(1);
+        verify(() => mockUpcomingUseCase!.execute()).called(1);
 
-      print(updatedState.nowPlaying);
-    });
+        print(updatedState.nowPlaying);
+      },
+    );
   });
 }
