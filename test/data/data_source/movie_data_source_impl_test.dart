@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:film_mind/data/data_source/movie_data_source.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -92,9 +94,9 @@ void main() {
           ),
         ).called(1);
 
-        print(result.toString());
-        print(dataSource!.bearerToken);
-        print(result.results[0].overview);
+        log(result.toString());
+        log(dataSource!.bearerToken ?? '');
+        log(result.results[0].overview);
       },
     );
 

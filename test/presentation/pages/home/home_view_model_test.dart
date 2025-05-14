@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -149,7 +151,7 @@ void main() {
         verify(() => mockTopRatedUseCase!.execute()).called(1);
         verify(() => mockUpcomingUseCase!.execute()).called(1);
 
-        print(updatedState.nowPlaying);
+        log(updatedState.nowPlaying.toString());
       },
     );
   });

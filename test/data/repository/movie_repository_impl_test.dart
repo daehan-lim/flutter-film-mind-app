@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:film_mind/data/data_source/movie_data_source.dart';
 import 'package:film_mind/data/dto/movie_response_dto.dart';
 import 'package:film_mind/data/repository/movie_repository_impl.dart';
@@ -66,7 +68,7 @@ void main() {
 
         verify(() => mockDataSource!.fetchNowPlayingMovies()).called(1);
 
-        print(result[0].overview);
+        log(result[0].overview);
       },
     );
 

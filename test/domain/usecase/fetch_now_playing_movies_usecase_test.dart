@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:film_mind/domain/entity/movie.dart';
 import 'package:film_mind/domain/repository/movie_repository.dart';
 import 'package:film_mind/domain/usecase/fetch_now_playing_movies_usecase.dart';
@@ -42,7 +44,7 @@ void main() {
       expect(result, equals(testMovies));
       verify(() => mockRepository!.fetchNowPlayingMovies()).called(1);
 
-      print(result);
+      log(result.toString());
     });
 
     test('execute should return empty list when repository returns null', () async {

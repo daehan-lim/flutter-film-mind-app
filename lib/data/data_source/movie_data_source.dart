@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../dto/movie_response_dto.dart';
@@ -31,7 +33,7 @@ class MovieDataSourceImpl extends BaseTmdbDataSource
       }
       return null;
     } catch (e) {
-      print('Error fetching now playing movies: $e');
+      log('Error fetching now playing movies: $e');
       return null;
     }
   }
@@ -49,7 +51,7 @@ class MovieDataSourceImpl extends BaseTmdbDataSource
       }
       return null;
     } catch (e) {
-      print('Error fetching popular movies: $e');
+      log('Error fetching popular movies: $e');
       return null;
     }
   }
@@ -67,7 +69,7 @@ class MovieDataSourceImpl extends BaseTmdbDataSource
       }
       return null;
     } catch (e) {
-      print('Error fetching top rated movies: $e');
+      log('Error fetching top rated movies: $e');
       return null;
     }
   }
@@ -85,7 +87,7 @@ class MovieDataSourceImpl extends BaseTmdbDataSource
       }
       return null;
     } catch (e) {
-      print('Error fetching upcoming movies: $e');
+      log('Error fetching upcoming movies: $e');
       return null;
     }
   }
