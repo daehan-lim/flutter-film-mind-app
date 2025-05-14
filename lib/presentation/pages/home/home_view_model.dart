@@ -48,13 +48,12 @@ class HomeState {
 class HomeViewModel extends Notifier<HomeState> {
   @override
   HomeState build() {
-    // fetchMovies();
+    fetchMovies();
     return HomeState(isLoading: true);
   }
 
   Future<void> fetchMovies() async {
     try {
-      state = state.copyWith(isLoading: true);
       // Fetch all movie categories in parallel
       final results = await Future.wait([
         ref.read(fetchNowPlayingMoviesUseCaseProvider).execute(),
