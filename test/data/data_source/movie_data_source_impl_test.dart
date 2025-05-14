@@ -94,7 +94,54 @@ void main() {
 
         print(result.toString());
         print(dataSource!.bearerToken);
+        print(result.results[0].overview);
       },
     );
+
+    test('fetchPopularMovies should return MovieResponseDto when successful', () async {
+      // Arrange
+      when(() => mockDio!.get(
+        any(),
+        queryParameters: any(named: 'queryParameters'),
+        options: any(named: 'options'),
+      )).thenAnswer((_) async => Response(
+        data: mockResponseData,
+        statusCode: 200,
+        requestOptions: RequestOptions(path: '/movie/popular'),
+      ));
+
+      // Act
+      final result = await dataSource!.fetchPopularMovies();
+
+      // Assert
+      expect(result, isNotNull);
+      expect(result!.results.length, 1);
+      expect(result.results[0].title, 'Test Movie');
+
+      verify(() => mockDio!.get(
+        '/movie/popular',
+        queryParameters: {'language': 'ko-KR', 'page': 1},
+        options: any(named: 'options'),
+      )).called(1);
+    });
+
+    test('fetchNowPlayingMovies should return null when request fails', () async {
+      // Arrange
+      when(() => mockDio!.get(
+        any(),
+        queryParameters: any(named: 'queryParameters'),
+        options: any(named: 'options'),
+      )).thenThrow(DioException(
+        requestOptions: RequestOptions(path: '/movie/now_playing'),
+        error: 'Network error',
+      ));
+
+      // Act
+      final result = await dataSource!.fetchNowPlayingMovies();
+
+      // Assert
+      expect(result, isNull);
+    });
+
   });
 }
