@@ -3,6 +3,7 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../../domain/entity/movie.dart';
 import '../../../widgets/app_cached_image.dart';
+import '../../detail/movie_detail_page.dart';
 
 class FeaturedMovieCard extends StatelessWidget {
   final Movie? movie;
@@ -12,27 +13,38 @@ class FeaturedMovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 20),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child:
-            isLoading
-                ? Shimmer.fromColors(
-                  baseColor: Colors.grey[800]!,
-                  highlightColor: Colors.grey[600]!,
-                  child: Container(
+    return GestureDetector(
+      onTap: () {
+        if (!isLoading) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MovieDetailPage(movie: movie!)),
+          );
+          // NavigationUtil.navigateToMovieDetail(movie!, context: context);
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(right: 20),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child:
+              isLoading
+                  ? Shimmer.fromColors(
+                    baseColor: Colors.grey[800]!,
+                    highlightColor: Colors.grey[600]!,
+                    child: Container(
+                      height: 450,
+                      width: double.infinity,
+                      color: Colors.grey[850],
+                    ),
+                  )
+                  : AppCachedImage(
+                    imageUrl: movie!.getPosterUrl(size: 'original'),
                     height: 450,
                     width: double.infinity,
-                    color: Colors.grey[850],
+                    fit: BoxFit.cover,
                   ),
-                )
-                : AppCachedImage(
-                  imageUrl: movie!.getPosterUrl(size: 'original'),
-                  height: 450,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
+        ),
       ),
     );
   }

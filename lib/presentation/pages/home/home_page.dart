@@ -1,3 +1,4 @@
+import 'package:film_mind/core/utils/navigation_util.dart';
 import 'package:film_mind/presentation/pages/home/widgets/featured_movie_card.dart';
 import 'package:film_mind/presentation/widgets/app_cached_image.dart';
 import 'package:flutter/material.dart';
@@ -86,11 +87,13 @@ class HomePage extends ConsumerWidget {
               final movieItem =
                   showRanking
                       ? _buildPopularItem(
+                        context: context,
                         isLoading ? null : movies[index],
                         index: index,
                         isLoading: isLoading,
                       )
                       : _buildMovieItem(
+                        context: context,
                         isLoading ? null : movies[index],
                         isLoading: isLoading,
                       );
@@ -110,7 +113,11 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildMovieItem(Movie? movie, {bool isLoading = false}) {
+  Widget _buildMovieItem(
+    Movie? movie, {
+    required BuildContext context,
+    bool isLoading = false,
+  }) {
     final image =
         isLoading
             ? Shimmer.fromColors(
@@ -125,11 +132,19 @@ class HomePage extends ConsumerWidget {
                 ),
               ),
             )
-            : AppCachedImage(
-              imageUrl: movie!.getPosterUrl(),
-              height: 180,
-              width: 120,
-              fit: BoxFit.cover,
+            : GestureDetector(
+              onTap: () {
+                NavigationUtil.navigateToMovieDetail(movie, context: context);
+              },
+              child: Hero(
+                tag: 'movie-image-${movie!.id}',
+                child: AppCachedImage(
+                  imageUrl: movie.getPosterUrl(),
+                  height: 180,
+                  width: 120,
+                  fit: BoxFit.cover,
+                ),
+              ),
             );
 
     return ClipRRect(borderRadius: BorderRadius.circular(12), child: image);
@@ -137,13 +152,14 @@ class HomePage extends ConsumerWidget {
 
   Widget _buildPopularItem(
     Movie? movie, {
+    required BuildContext context,
     required int index,
     bool isLoading = false,
   }) {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        _buildMovieItem(movie, isLoading: isLoading),
+        _buildMovieItem(movie, context: context, isLoading: isLoading),
         if (!isLoading)
           Positioned(
             bottom: 0,

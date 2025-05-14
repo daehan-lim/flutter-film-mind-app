@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
-class AppStyles {
+abstract class AppStyles {
   //dimensions
   static const double mediumDimension = 24;
-  static const usersListText = TextStyle(color: Color(0xFF424242), fontSize: 14);
+
+  static const detailSectionText = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+  );
 }

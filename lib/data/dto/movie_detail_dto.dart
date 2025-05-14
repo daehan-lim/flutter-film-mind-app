@@ -9,24 +9,24 @@ class MovieDetailDto {
   final bool adult;
   final String backdropPath;
   final dynamic belongsToCollection;
-  final int budget;
+  final int? budget;
   final String homepage;
   final String imdbId;
   final List<String> originCountry;
   final String originalLanguage;
   final String originalTitle;
-  final double popularity;
+  final double? popularity;
   final String posterPath;
   final List<ProductionCompany> productionCompanies;
   final List<ProductionCountry> productionCountries;
   final DateTime? releaseDate;
-  final int revenue;
-  final int runtime;
+  final int? revenue;
+  final int? runtime;
   final List<SpokenLanguage> spokenLanguages;
   final String status;
   final bool video;
-  final double voteAverage;
-  final int voteCount;
+  final double? voteAverage;
+  final int? voteCount;
 
   MovieDetailDto({
     required this.id,
@@ -62,7 +62,7 @@ class MovieDetailDto {
       adult: json["adult"] ?? false,
       backdropPath: json["backdrop_path"] ?? "",
       belongsToCollection: json["belongs_to_collection"],
-      budget: json["budget"] ?? 0,
+      budget: json["budget"],
       genres:
           json["genres"] == null
               ? []
@@ -77,7 +77,7 @@ class MovieDetailDto {
       originalLanguage: json["original_language"] ?? "",
       originalTitle: json["original_title"] ?? "",
       overview: json["overview"] ?? "",
-      popularity: json["popularity"] ?? 0.0,
+      popularity: json["popularity"],
       posterPath: json["poster_path"] ?? "",
       productionCompanies:
           json["production_companies"] == null
@@ -96,8 +96,8 @@ class MovieDetailDto {
                 ),
               ),
       releaseDate: DateTime.tryParse(json["release_date"] ?? ""),
-      revenue: json["revenue"] ?? 0,
-      runtime: json["runtime"] ?? 0,
+      revenue: json["revenue"],
+      runtime: json["runtime"],
       spokenLanguages:
           json["spoken_languages"] == null
               ? []
@@ -110,8 +110,8 @@ class MovieDetailDto {
       tagline: json["tagline"] ?? "",
       title: json["title"] ?? "",
       video: json["video"] ?? false,
-      voteAverage: json["vote_average"] ?? 0.0,
-      voteCount: json["vote_count"] ?? 0,
+      voteAverage: json["vote_average"],
+      voteCount: json["vote_count"],
     );
   }
 

@@ -34,11 +34,6 @@ class Movie {
     return '$_imageBaseUrl$size$backdropPath';
   }
 
-  // Format release date
-  String getFormattedReleaseDate() {
-    if (releaseDate == null) return '';
-    return '${releaseDate!.year}-${releaseDate!.month.toString().padLeft(2, '0')}-${releaseDate!.day.toString().padLeft(2, '0')}';
-  }
 
   @override
   String toString() {

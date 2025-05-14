@@ -1,4 +1,5 @@
-// lib/domain/entity/movie_detail.dart
+import 'package:film_mind/core/extensions/number_extensions.dart';
+
 class MovieDetail {
   /// 영화의 고유 ID (API에서 유니크한 식별자)
   final int id;
@@ -16,42 +17,56 @@ class MovieDetail {
   final List<String> genres;
 
   /// 영화의 예산
-  final int budget;
+  final int? _budget;
 
   /// 제작 회사 로고들의 리스트 (각 로고는 이미지 경로 또는 URL일 수 있음)
   final List<String> productionCompanyLogos;
 
   /// 영화의 인기 점수 (예: TMDB에서 제공하는 popularity 점수)
-  final double popularity;
+  final double? popularity;
 
   /// 영화의 개봉일 (예: 2023-05-01)
   final DateTime releaseDate;
 
   /// 영화의 총 수익 (revenue)
-  final int revenue;
+  final int? _revenue;
 
   /// 영화의 상영 시간 (분 단위)
-  final int runtime;
+  final int? _runtime;
 
   /// 영화의 평균 평점 (예: 8.4)
-  final double voteAverage;
+  final double? voteAverage;
 
   /// 영화에 대한 총 투표 수
-  final int voteCount;
+  final int? voteCount;
 
   MovieDetail({
     required this.id,
     required this.title,
     required this.overview,
     required this.tagline,
-    required this.budget,
     required this.genres,
     required this.productionCompanyLogos,
     required this.popularity,
     required this.releaseDate,
-    required this.revenue,
-    required this.runtime,
     required this.voteAverage,
     required this.voteCount,
-  });
+    required int? budget,
+    required int? runtime,
+    required int? revenue,
+  }) : _revenue = revenue,
+       _runtime = runtime,
+       _budget = budget;
+
+  String get runtime {
+    return _runtime == null ? '' : '$_runtime분';
+  }
+
+  String get budget {
+    return _budget?.formatCurrency() ?? '';
+  }
+
+  String get revenue {
+    return _revenue?.formatCurrency() ?? '';
+  }
 }
