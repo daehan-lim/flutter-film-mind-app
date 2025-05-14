@@ -19,6 +19,7 @@ abstract class AppTheme {
       ),
 
       scaffoldBackgroundColor: AppColors.surface,
+      cardColor: AppColors.surface,
       highlightColor: Colors.grey[700],
       dividerColor: AppColors.dividerDark,
 
@@ -57,7 +58,6 @@ abstract class AppTheme {
         ),
       ),
 
-      cardColor: AppColors.surface,
     );
   }
 
