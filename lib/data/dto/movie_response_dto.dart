@@ -33,6 +33,11 @@ class MovieResponseDto {
   List<Movie> toEntityList() {
     return results.map((result) => result.toEntity()).toList();
   }
+
+  @override
+  String toString() {
+    return 'MovieResponseDto(page: $page, totalPages: $totalPages, totalResults: $totalResults, resultsCount: ${results.length}, dates: $dates)';
+  }
 }
 
 class Dates {
