@@ -6,7 +6,7 @@
 
 ## 📱 시연 영상
 
-[![시연 영상 보기](https://img.youtube.com/vi/OKqoMnWGQ5o/hqdefault.jpg)](https://www.youtube.com/shorts/OKqoMnWGQ5o)
+[![시연 영상 보기](https://img.youtube.com/vi/OKqoMnWGQ5o/hqdefault.jpg)](https://vimeo.com/1084456818)
 
 ## 🎯 주요 기능
 
