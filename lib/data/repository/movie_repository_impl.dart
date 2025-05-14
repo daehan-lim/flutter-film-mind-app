@@ -1,4 +1,5 @@
 import '../../domain/entity/movie.dart';
+import '../../domain/entity/movie_detail.dart';
 import '../../domain/repository/movie_repository.dart';
 import '../data_source/movie_data_source.dart';
 
@@ -29,5 +30,11 @@ class MovieRepositoryImpl implements MovieRepository {
   Future<List<Movie>?> fetchUpcomingMovies() async {
     final responseDto = await _dataSource.fetchUpcomingMovies();
     return responseDto?.results.map((result) => result.toEntity()).toList();
+  }
+
+  @override
+  Future<MovieDetail?> fetchMovieDetail(int id) async {
+    final responseDto = await _dataSource.fetchMovieDetail(id);
+    return responseDto?.toEntity();
   }
 }
