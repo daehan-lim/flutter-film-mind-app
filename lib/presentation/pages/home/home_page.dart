@@ -1,6 +1,7 @@
 import 'package:film_mind/presentation/widgets/app_cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../domain/entity/movie.dart';
 import 'home_view_model.dart';
 
@@ -24,15 +25,35 @@ class HomePage extends ConsumerWidget {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              _buildFeaturedMovie(state.featuredMovie),
+              _buildFeaturedMovie(
+                state.featuredMovie,
+                isLoading: state.isLoading,
+              ),
               const SizedBox(height: 30),
-              _buildMovieSection('현재 상영중', state.nowPlaying),
+              _buildMovieSection(
+                '현재 상영중',
+                state.nowPlaying,
+                isLoading: state.isLoading,
+              ),
               const SizedBox(height: 20),
-              _buildMovieSection('인기순', state.popular, showRanking: true),
+              _buildMovieSection(
+                '인기순',
+                state.popular,
+                showRanking: true,
+                isLoading: state.isLoading,
+              ),
               const SizedBox(height: 20),
-              _buildMovieSection('평점 높은순', state.topRated),
+              _buildMovieSection(
+                '평점 높은순',
+                state.topRated,
+                isLoading: state.isLoading,
+              ),
               const SizedBox(height: 20),
-              _buildMovieSection('개봉예정', state.upcoming),
+              _buildMovieSection(
+                '개봉예정',
+                state.upcoming,
+                isLoading: state.isLoading,
+              ),
               const SizedBox(height: 60),
             ],
           ),
@@ -41,18 +62,28 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildFeaturedMovie(Movie? movie) {
-    if (movie == null) return const SizedBox.shrink();
+  Widget _buildFeaturedMovie(Movie? movie, {bool isLoading = false}) {
     return Padding(
-      padding: EdgeInsets.only(right: 20),
+      padding: const EdgeInsets.only(right: 20),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
-        child: AppCachedImage(
-          imageUrl: movie.getPosterUrl(size: 'original'),
-          height: 450,
-          width: double.infinity,
-          fit: BoxFit.cover,
-        ),
+        child:
+            isLoading
+                ? Shimmer.fromColors(
+                  baseColor: Colors.grey[800]!,
+                  highlightColor: Colors.grey[600]!,
+                  child: Container(
+                    height: 450,
+                    width: double.infinity,
+                    color: Colors.grey[850],
+                  ),
+                )
+                : AppCachedImage(
+                  imageUrl: movie!.getPosterUrl(size: 'original'),
+                  height: 450,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
       ),
     );
   }
@@ -61,6 +92,7 @@ class HomePage extends ConsumerWidget {
     String sectionTitle,
     List<Movie> movies, {
     bool showRanking = false,
+    bool isLoading = false,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,12 +106,19 @@ class HomePage extends ConsumerWidget {
           height: 180,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: movies.length,
+            itemCount: isLoading ? 6 : movies.length,
             itemBuilder: (context, index) {
               final movieItem =
                   showRanking
-                      ? _buildPopularItem(movies[index], index: index)
-                      : _buildMovieItem(movies[index]);
+                      ? _buildPopularItem(
+                        isLoading ? null : movies[index],
+                        index: index,
+                        isLoading: isLoading,
+                      )
+                      : _buildMovieItem(
+                        isLoading ? null : movies[index],
+                        isLoading: isLoading,
+                      );
 
               // Special left padding for the first item when ranking is shown
               return Padding(
@@ -96,39 +135,57 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildMovieItem(Movie movie) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
-      child: AppCachedImage(
-        imageUrl: movie.getPosterUrl(),
-        height: 180,
-        width: 120,
-        fit: BoxFit.cover,
-      ),
-    );
+  Widget _buildMovieItem(Movie? movie, {bool isLoading = false}) {
+    final image =
+        isLoading
+            ? Shimmer.fromColors(
+              baseColor: Colors.grey[800]!,
+              highlightColor: Colors.grey[600]!,
+              child: Container(
+                height: 180,
+                width: 120,
+                decoration: BoxDecoration(
+                  color: Colors.grey[850],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            )
+            : AppCachedImage(
+              imageUrl: movie!.getPosterUrl(),
+              height: 180,
+              width: 120,
+              fit: BoxFit.cover,
+            );
+
+    return ClipRRect(borderRadius: BorderRadius.circular(12), child: image);
   }
 
-  Widget _buildPopularItem(Movie movie, {required int index}) {
+  Widget _buildPopularItem(
+    Movie? movie, {
+    required int index,
+    bool isLoading = false,
+  }) {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        _buildMovieItem(movie),
-        Positioned(
-          bottom: 0,
-          left: -23,
-          child: Transform.translate(
-            offset: const Offset(0, 8),
-            child: Text(
-              '${index + 1}',
-              style: TextStyle(
-                fontSize: 64,
-                fontWeight: FontWeight.bold,
-                color: Colors.white.withValues(alpha: 0.8),
-                height: 1.0, // prevents extra line spacing
+        _buildMovieItem(movie, isLoading: isLoading),
+        if (!isLoading)
+          Positioned(
+            bottom: 0,
+            left: -23,
+            child: Transform.translate(
+              offset: const Offset(0, 8),
+              child: Text(
+                '${index + 1}',
+                style: TextStyle(
+                  fontSize: 64,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white.withValues(alpha: 0.8),
+                  height: 1.0,
+                ),
               ),
             ),
           ),
-        ),
       ],
     );
   }
