@@ -42,15 +42,15 @@ class Movie {
 
   @override
   String toString() {
-    return 'Movie('
-        'id: $id, '
-        'title: $title, '
-        'posterPath: ${getPosterUrl()}, '
-        'backdropPath: ${getBackdropUrl()}, '
-        'voteAverage: $voteAverage, '
-        'overview: $overview, '
-        'releaseDate: $releaseDate, '
-        'popularity: $popularity, '
+    return 'Movie(\n'
+        'id: $id, \n'
+        'title: $title, \n'
+        'posterPath: ${getPosterUrl()}, \n'
+        'backdropPath: ${getBackdropUrl()}, \n'
+        'voteAverage: $voteAverage, \n'
+        'overview: $overview, \n'
+        'releaseDate: $releaseDate, \n'
+        'popularity: $popularity, \n'
         'voteCount: $voteCount'
         ')';
   }
