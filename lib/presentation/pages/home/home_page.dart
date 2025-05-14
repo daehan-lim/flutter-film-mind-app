@@ -1,3 +1,4 @@
+import 'package:film_mind/presentation/pages/home/widgets/featured_movie_card.dart';
 import 'package:film_mind/presentation/widgets/app_cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,7 +26,7 @@ class HomePage extends ConsumerWidget {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              _buildFeaturedMovie(
+              FeaturedMovieCard(
                 state.featuredMovie,
                 isLoading: state.isLoading,
               ),
@@ -58,32 +59,6 @@ class HomePage extends ConsumerWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildFeaturedMovie(Movie? movie, {bool isLoading = false}) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 20),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child:
-            isLoading
-                ? Shimmer.fromColors(
-                  baseColor: Colors.grey[800]!,
-                  highlightColor: Colors.grey[600]!,
-                  child: Container(
-                    height: 450,
-                    width: double.infinity,
-                    color: Colors.grey[850],
-                  ),
-                )
-                : AppCachedImage(
-                  imageUrl: movie!.getPosterUrl(size: 'original'),
-                  height: 450,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
       ),
     );
   }
