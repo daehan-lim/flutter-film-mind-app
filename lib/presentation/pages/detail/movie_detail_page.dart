@@ -6,6 +6,7 @@ import 'package:film_mind/presentation/widgets/custom_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../app/constants/app_styles.dart';
 import '../../../domain/entity/movie.dart';
 import '../../../domain/entity/movie_detail.dart';
@@ -51,7 +52,7 @@ class MovieDetailPage extends ConsumerWidget {
     return PopupMenuButton<int>(
       color: const Color(0xFF202020),
       // dark background like in image
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       offset: const Offset(0, 50),
       padding: EdgeInsets.zero,
       itemBuilder:
@@ -61,7 +62,7 @@ class MovieDetailPage extends ConsumerWidget {
               value: 0,
               text: '구글 검색',
               iconAsset: 'assets/icons/google_icon.svg',
-              dimension: 19
+              dimension: 19,
             ),
             const PopupMenuDivider(),
             _buildPopupItem(
@@ -69,22 +70,29 @@ class MovieDetailPage extends ConsumerWidget {
               value: 1,
               text: '네이버 검색',
               iconAsset: 'assets/icons/naver_icon.svg',
-              dimension: 16
+              dimension: 16,
             ),
           ],
-      onSelected: (value) {
-        // Handle selection
+      onSelected: (value) async {
+        final query = Uri.encodeComponent('${movie.title} 영화');
+        final url = value == 0
+            ? 'https://www.google.com/search?q=$query'
+            : 'https://search.naver.com/search.naver?query=$query';
+        await launchUrl(
+          Uri.parse(url),
+          mode: LaunchMode.inAppBrowserView,
+        );
       },
     );
   }
 
   PopupMenuItem<int> _buildPopupItem(
-      BuildContext context, {
-        required int value,
-        required String text,
-        required String iconAsset,
-        required double dimension,
-      }) {
+    BuildContext context, {
+    required int value,
+    required String text,
+    required String iconAsset,
+    required double dimension,
+  }) {
     return PopupMenuItem<int>(
       value: value,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
@@ -98,12 +106,14 @@ class MovieDetailPage extends ConsumerWidget {
             width: dimension,
             height: dimension,
             colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-            placeholderBuilder: (_) => SizedBox(width: dimension, height: dimension),
+            placeholderBuilder:
+                (_) => SizedBox(width: dimension, height: dimension),
           ),
         ],
       ),
     );
   }
+
   Widget _buildContentLayout(DetailState state, MovieDetail? detail) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
