@@ -99,7 +99,7 @@ class HomePage extends ConsumerWidget {
               return Padding(
                 padding: EdgeInsets.only(
                   left: index == 0 && showRanking ? 20 : 0,
-                  right: showRanking && index < movies.length - 1 ? 30 : 12,
+                  right: showRanking && index < movies.length - 1 ? 30 : 13,
                 ),
                 child: movieItem,
               );
