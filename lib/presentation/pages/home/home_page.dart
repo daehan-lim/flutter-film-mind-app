@@ -72,16 +72,24 @@ class HomePage extends ConsumerWidget {
         const SizedBox(height: 10),
         SizedBox(
           height: 180,
-          child: ListView.separated(
+          child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: movies.length,
             itemBuilder: (context, index) {
-              if (!showRanking) {
-                return _buildMovieItem(movies[index]);
-              }
-              return _buildPopularItem(movies[index], index: index);
+              final movieItem =
+                  showRanking
+                      ? _buildPopularItem(movies[index], index: index)
+                      : _buildMovieItem(movies[index]);
+
+              // Special left padding for the first item when ranking is shown
+              return Padding(
+                padding: EdgeInsets.only(
+                  left: index == 0 && showRanking ? 24 : 0,
+                  right: showRanking && index < movies.length - 1 ? 30 : 12,
+                ),
+                child: movieItem,
+              );
             },
-            separatorBuilder: (context, index) => const SizedBox(width: 12),
           ),
         ),
       ],
@@ -106,14 +114,14 @@ class HomePage extends ConsumerWidget {
       children: [
         _buildMovieItem(movie),
         Positioned(
-          bottom: 8,
-          left: 8,
+          bottom: 0,
+          left: -24,
           child: Text(
             '${index + 1}',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 64,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Colors.white.withValues(alpha: 0.8),
             ),
           ),
         ),
