@@ -7,10 +7,15 @@ abstract class NavigationUtil {
   static void navigateToMovieDetail(
     Movie movie, {
     required BuildContext context,
+    required String categoryName,
   }) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MovieDetailPage(movie: movie)),
+      MaterialPageRoute(
+        builder:
+            (context) =>
+                MovieDetailPage(movie: movie, categoryName: categoryName),
+      ),
     );
   }
 }

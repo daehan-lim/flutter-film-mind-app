@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../domain/entity/movie.dart';
+import '../../../domain/entity/movie_category.dart';
 import 'home_view_model.dart';
 
 class HomePage extends ConsumerWidget {
@@ -22,40 +23,46 @@ class HomePage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              const Text(
-                '가장 인기있는',
+              Text(
+                MovieCategory.featured.label,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
               FeaturedMovieCard(
                 state.featuredMovie,
                 isLoading: state.isLoading,
+                categoryName: MovieCategory.featured.name,
               ),
+
               const SizedBox(height: 30),
               _buildMovieSection(
-                '현재 상영중',
+                MovieCategory.nowPlaying,
                 state.nowPlaying,
                 isLoading: state.isLoading,
               ),
+
               const SizedBox(height: 20),
               _buildMovieSection(
-                '인기순',
+                MovieCategory.popular,
                 state.popular,
                 showRanking: true,
                 isLoading: state.isLoading,
               ),
+
               const SizedBox(height: 20),
               _buildMovieSection(
-                '평점 높은순',
+                MovieCategory.topRated,
                 state.topRated,
                 isLoading: state.isLoading,
               ),
+
               const SizedBox(height: 20),
               _buildMovieSection(
-                '개봉예정',
+                MovieCategory.upcoming,
                 state.upcoming,
                 isLoading: state.isLoading,
               ),
+
               const SizedBox(height: 60),
             ],
           ),
@@ -65,7 +72,7 @@ class HomePage extends ConsumerWidget {
   }
 
   Widget _buildMovieSection(
-    String sectionTitle,
+    MovieCategory category,
     List<Movie> movies, {
     bool showRanking = false,
     bool isLoading = false,
@@ -74,7 +81,7 @@ class HomePage extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          sectionTitle,
+          category.label,
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 10),
@@ -96,6 +103,7 @@ class HomePage extends ConsumerWidget {
                         context: context,
                         isLoading ? null : movies[index],
                         isLoading: isLoading,
+                        categoryName: category.name,
                       );
 
               // Special left padding for the first item when ranking is shown
@@ -116,6 +124,7 @@ class HomePage extends ConsumerWidget {
   Widget _buildMovieItem(
     Movie? movie, {
     required BuildContext context,
+    required String categoryName,
     bool isLoading = false,
   }) {
     final image =
@@ -134,10 +143,14 @@ class HomePage extends ConsumerWidget {
             )
             : GestureDetector(
               onTap: () {
-                NavigationUtil.navigateToMovieDetail(movie, context: context);
+                NavigationUtil.navigateToMovieDetail(
+                  movie,
+                  categoryName: categoryName,
+                  context: context,
+                );
               },
               child: Hero(
-                tag: 'movie-image-${movie!.id}',
+                tag: 'movie-image-${movie!.id}-$categoryName',
                 child: AppCachedImage(
                   imageUrl: movie.getPosterUrl(),
                   height: 180,
@@ -159,7 +172,12 @@ class HomePage extends ConsumerWidget {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        _buildMovieItem(movie, context: context, isLoading: isLoading),
+        _buildMovieItem(
+          movie,
+          context: context,
+          isLoading: isLoading,
+          categoryName: MovieCategory.popular.name,
+        ),
         if (!isLoading)
           Positioned(
             bottom: 0,

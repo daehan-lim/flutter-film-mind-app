@@ -1,3 +1,4 @@
+import 'package:film_mind/core/utils/navigation_util.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -8,17 +9,24 @@ import '../../detail/movie_detail_page.dart';
 class FeaturedMovieCard extends StatelessWidget {
   final Movie? movie;
   final bool isLoading;
+  final String categoryName;
 
-  const FeaturedMovieCard(this.movie, {super.key, this.isLoading = false});
+  const FeaturedMovieCard(
+    this.movie, {
+    super.key,
+    required this.categoryName,
+    this.isLoading = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         if (!isLoading) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MovieDetailPage(movie: movie!)),
+          NavigationUtil.navigateToMovieDetail(
+            movie!,
+            context: context,
+            categoryName: categoryName,
           );
           // NavigationUtil.navigateToMovieDetail(movie!, context: context);
         }

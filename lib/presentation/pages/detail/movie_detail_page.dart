@@ -13,8 +13,13 @@ import 'movie_detail_view_model.dart';
 
 class MovieDetailPage extends ConsumerWidget {
   final Movie movie;
+  final String categoryName;
 
-  const MovieDetailPage({super.key, required this.movie});
+  const MovieDetailPage({
+    super.key,
+    required this.movie,
+    required this.categoryName,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,7 +32,7 @@ class MovieDetailPage extends ConsumerWidget {
         slivers: [
           SliverToBoxAdapter(
             child: Hero(
-              tag: 'movie-image-${movie.id}',
+              tag: 'movie-image-${movie.id}-$categoryName',
               child: AppCachedImage(
                 imageUrl: movie.getPosterUrl(),
                 width: double.infinity,
