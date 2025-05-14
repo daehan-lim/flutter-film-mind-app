@@ -1,10 +1,9 @@
-import 'package:film_mind/core/utils/navigation_util.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../../core/utils/navigation_util.dart';
 import '../../../../domain/entity/movie.dart';
 import '../../../widgets/app_cached_image.dart';
-import '../../detail/movie_detail_page.dart';
 
 class FeaturedMovieCard extends StatelessWidget {
   final Movie? movie;
@@ -28,7 +27,6 @@ class FeaturedMovieCard extends StatelessWidget {
             context: context,
             categoryName: categoryName,
           );
-          // NavigationUtil.navigateToMovieDetail(movie!, context: context);
         }
       },
       child: Padding(
@@ -46,11 +44,14 @@ class FeaturedMovieCard extends StatelessWidget {
                       color: Colors.grey[850],
                     ),
                   )
-                  : AppCachedImage(
-                    imageUrl: movie!.getPosterUrl(size: 'original'),
-                    height: 450,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
+                  : Hero(
+                    tag: 'movie-image-${movie!.id}-$categoryName',
+                    child: AppCachedImage(
+                      imageUrl: movie!.getPosterUrl(size: 'original'),
+                      height: 450,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
                   ),
         ),
       ),
