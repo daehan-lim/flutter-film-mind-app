@@ -39,4 +39,19 @@ class Movie {
     if (releaseDate == null) return '';
     return '${releaseDate!.year}-${releaseDate!.month.toString().padLeft(2, '0')}-${releaseDate!.day.toString().padLeft(2, '0')}';
   }
+
+  @override
+  String toString() {
+    return 'Movie('
+        'id: $id, '
+        'title: $title, '
+        'posterPath: ${getPosterUrl()}, '
+        'backdropPath: ${getBackdropUrl()}, '
+        'voteAverage: $voteAverage, '
+        'overview: $overview, '
+        'releaseDate: $releaseDate, '
+        'popularity: $popularity, '
+        'voteCount: $voteCount'
+        ')';
+  }
 }
