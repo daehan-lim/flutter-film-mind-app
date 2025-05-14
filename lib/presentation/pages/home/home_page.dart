@@ -84,7 +84,7 @@ class HomePage extends ConsumerWidget {
               // Special left padding for the first item when ranking is shown
               return Padding(
                 padding: EdgeInsets.only(
-                  left: index == 0 && showRanking ? 24 : 0,
+                  left: index == 0 && showRanking ? 20 : 0,
                   right: showRanking && index < movies.length - 1 ? 30 : 12,
                 ),
                 child: movieItem,
@@ -115,13 +115,17 @@ class HomePage extends ConsumerWidget {
         _buildMovieItem(movie),
         Positioned(
           bottom: 0,
-          left: -24,
-          child: Text(
-            '${index + 1}',
-            style: TextStyle(
-              fontSize: 64,
-              fontWeight: FontWeight.bold,
-              color: Colors.white.withValues(alpha: 0.8),
+          left: -23,
+          child: Transform.translate(
+            offset: const Offset(0, 8),
+            child: Text(
+              '${index + 1}',
+              style: TextStyle(
+                fontSize: 64,
+                fontWeight: FontWeight.bold,
+                color: Colors.white.withValues(alpha: 0.8),
+                height: 1.0, // prevents extra line spacing
+              ),
             ),
           ),
         ),
