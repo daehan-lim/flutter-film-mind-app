@@ -9,6 +9,9 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   ref.read(homeViewModelProvider.notifier).fetchMovies();
+    // });
     final state = ref.watch(homeViewModelProvider);
 
     return Scaffold(
@@ -33,7 +36,7 @@ class HomePage extends ConsumerWidget {
               _buildMovieSection('평점 높은순', state.topRated),
               const SizedBox(height: 20),
               _buildMovieSection('개봉예정', state.upcoming),
-              const SizedBox(height: 20),
+              const SizedBox(height: 60),
             ],
           ),
         ),
@@ -48,7 +51,7 @@ class HomePage extends ConsumerWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: AppCachedImage(
-          imageUrl: movie.posterUrl,
+          imageUrl: movie.getPosterUrl(size: 'original'),
           height: 450,
           width: double.infinity,
           fit: BoxFit.cover,
@@ -100,7 +103,7 @@ class HomePage extends ConsumerWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: AppCachedImage(
-        imageUrl: movie.posterUrl,
+        imageUrl: movie.getPosterUrl(),
         height: 180,
         width: 120,
         fit: BoxFit.cover,

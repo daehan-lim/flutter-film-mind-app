@@ -1,6 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../../domain/entity/movie.dart';
+import '../../../domain/usecase/fetch_now_playing_movies_usecase.dart';
+import '../../../domain/usecase/fetch_popular_movies_usecase.dart';
+import '../../../domain/usecase/fetch_top_rated_movies_usecase.dart';
+import '../../../domain/usecase/fetch_upcoming_movies_usecase.dart';
 
 class HomeState {
   final Movie? featuredMovie;
@@ -8,6 +11,8 @@ class HomeState {
   final List<Movie> popular;
   final List<Movie> topRated;
   final List<Movie> upcoming;
+  final bool isLoading;
+  final String? error;
 
   HomeState({
     this.featuredMovie,
@@ -15,6 +20,8 @@ class HomeState {
     this.popular = const [],
     this.topRated = const [],
     this.upcoming = const [],
+    this.isLoading = false,
+    this.error,
   });
 
   HomeState copyWith({
@@ -23,6 +30,8 @@ class HomeState {
     List<Movie>? popular,
     List<Movie>? topRated,
     List<Movie>? upcoming,
+    bool? isLoading,
+    String? error,
   }) {
     return HomeState(
       featuredMovie: featuredMovie ?? this.featuredMovie,
@@ -30,6 +39,8 @@ class HomeState {
       popular: popular ?? this.popular,
       topRated: topRated ?? this.topRated,
       upcoming: upcoming ?? this.upcoming,
+      isLoading: isLoading ?? this.isLoading,
+      error: error,
     );
   }
 }
@@ -37,33 +48,42 @@ class HomeState {
 class HomeViewModel extends Notifier<HomeState> {
   @override
   HomeState build() {
-    return loadFakeData();
+    fetchMovies();
+    return HomeState(isLoading: true);
   }
 
-  HomeState loadFakeData() {
-    List<Movie> generateCategory(String category, int startId) {
-      return List.generate(10, (i) {
-        final id = startId + i;
-        return Movie(
-          id: id,
-          title: '$category Movie $i',
-          posterUrl: 'https://picsum.photos/id/10/150/220',
-        );
-      });
+  Future<void> fetchMovies() async {
+    try {
+      // Fetch all movie categories in parallel
+      final results = await Future.wait([
+        ref.read(fetchNowPlayingMoviesUseCaseProvider).execute(),
+        ref.read(fetchPopularMoviesUseCaseProvider).execute(),
+        ref.read(fetchTopRatedMoviesUseCaseProvider).execute(),
+        ref.read(fetchUpcomingMoviesUseCaseProvider).execute(),
+      ]);
+
+      final List<Movie> nowPlaying = results[0];
+      final List<Movie> popular = results[1];
+      final List<Movie> topRated = results[2];
+      final List<Movie> upcoming = results[3];
+
+      // Set the most popular movie as featured if available
+      final Movie? featuredMovie = popular.isNotEmpty ? popular[0] : null;
+
+      state = state.copyWith(
+        isLoading: false,
+        nowPlaying: nowPlaying,
+        popular: popular,
+        topRated: topRated,
+        upcoming: upcoming,
+        featuredMovie: featuredMovie,
+      );
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: 'Failed to load movies: $e',
+      );
     }
-
-    final nowPlaying = generateCategory('NowPlaying', 100);
-    final popular = generateCategory('Popular', 200);
-    final topRated = generateCategory('TopRated', 300);
-    final upcoming = generateCategory('Upcoming', 400);
-
-    return HomeState(
-      featuredMovie: popular[0],
-      nowPlaying: nowPlaying,
-      popular: popular,
-      topRated: topRated,
-      upcoming: upcoming,
-    );
   }
 }
 
