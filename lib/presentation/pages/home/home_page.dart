@@ -9,9 +9,9 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   ref.read(homeViewModelProvider.notifier).fetchMovies();
-    // });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(homeViewModelProvider.notifier).fetchMovies();
+    });
     final state = ref.watch(homeViewModelProvider);
 
     return Scaffold(
