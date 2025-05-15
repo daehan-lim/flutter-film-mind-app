@@ -58,14 +58,25 @@ class MovieDetail {
        _runtime = runtime,
        _budget = budget;
 
+  /// Formats the movie runtime as a string with minutes
+  ///
+  /// Returns formatted string (e.g. "120분") or empty string if runtime is null
   String get runtime {
     return _runtime == null ? '' : '$_runtime분';
   }
 
+  /// Returns the movie budget formatted as currency
+  ///
+  /// Uses [formatCurrency] extension method to format the value
+  /// Returns empty string if budget is null
   String get budget {
     return _budget?.formatCurrency() ?? '';
   }
 
+  /// Returns the movie revenue formatted as currency
+  ///
+  /// Uses [formatCurrency] extension method to format the value
+  /// Returns empty string if revenue is null
   String get revenue {
     return _revenue?.formatCurrency() ?? '';
   }
