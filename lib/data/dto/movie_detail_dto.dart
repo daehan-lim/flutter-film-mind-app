@@ -28,6 +28,9 @@ class MovieDetailDto {
   final double? voteAverage;
   final int? voteCount;
 
+  /// Creates a [MovieDetailDto] instance with movie details from TMDB API
+  ///
+  /// All parameters are required though some may be nullable based on API response
   MovieDetailDto({
     required this.id,
     required this.title,
@@ -57,6 +60,9 @@ class MovieDetailDto {
     required this.voteCount,
   });
 
+  /// Factory constructor that creates a [MovieDetailDto] from a JSON map
+  ///
+  /// Handles null values and type conversions from TMDB API response
   factory MovieDetailDto.fromJson(Map<String, dynamic> json) {
     return MovieDetailDto(
       adult: json["adult"] ?? false,
@@ -115,7 +121,10 @@ class MovieDetailDto {
     );
   }
 
-  // Add this method to your MovieDetailDto class
+  /// Converts [MovieDetailDto] to a domain entity [MovieDetail]
+  ///
+  /// Maps DTO fields to entity fields, transforms production company logos
+  /// to full URLs, and filters out companies without logos
   MovieDetail toEntity() {
     return MovieDetail(
       id: id,
@@ -148,6 +157,7 @@ class Genre {
   final int id;
   final String name;
 
+  /// Creates a [Genre] instance from a JSON map
   factory Genre.fromJson(Map<String, dynamic> json) {
     return Genre(id: json["id"] ?? 0, name: json["name"] ?? "");
   }
@@ -166,6 +176,7 @@ class ProductionCompany {
   final String name;
   final String originCountry;
 
+  /// Creates a [ProductionCountry] instance from a JSON map
   factory ProductionCompany.fromJson(Map<String, dynamic> json) {
     return ProductionCompany(
       id: json["id"] ?? 0,
@@ -182,6 +193,7 @@ class ProductionCountry {
   final String iso31661;
   final String name;
 
+  /// Creates a [ProductionCountry] instance from a JSON map
   factory ProductionCountry.fromJson(Map<String, dynamic> json) {
     return ProductionCountry(
       iso31661: json["iso_3166_1"] ?? "",
